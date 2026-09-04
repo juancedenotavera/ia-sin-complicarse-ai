@@ -7,97 +7,200 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
+
 body{
-    font-family:Arial,sans-serif;
-    background:#080b14;
-    color:white;
-    min-height:100vh;
+font-family:Arial,Helvetica,sans-serif;
+background:#070b14;
+color:#fff;
+min-height:100vh;
 }
+
 header{
-    padding:25px 8%;
-    border-bottom:1px solid #202638;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+height:72px;
+border-bottom:1px solid #20283a;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 6%;
+background:#080d18;
 }
-.logo{font-size:24px;font-weight:bold}
+
+.logo{
+font-size:20px;
+font-weight:800;
+letter-spacing:.5px;
+}
+
 .logo span{color:#19cfff}
-.badge{
-    background:#111827;
-    padding:10px 16px;
-    border-radius:20px;
-    color:#19cfff;
+
+.credits{
+background:#111a2b;
+border:1px solid #26344d;
+padding:10px 16px;
+border-radius:20px;
+font-size:14px;
+color:#aebbd0;
 }
+
 main{
-    max-width:900px;
-    margin:60px auto;
-    padding:20px;
-    text-align:center;
+max-width:1050px;
+margin:0 auto;
+padding:70px 20px;
 }
+
+.hero{text-align:center}
+
+.badge{
+display:inline-block;
+padding:8px 15px;
+border:1px solid #1b9fca;
+border-radius:30px;
+color:#19cfff;
+font-size:13px;
+margin-bottom:20px;
+background:#0b1824;
+}
+
 h1{
-    font-size:48px;
-    margin-bottom:15px;
+font-size:52px;
+line-height:1.1;
+margin-bottom:18px;
 }
+
 h1 span{color:#19cfff}
+
 .subtitle{
-    color:#9ca3af;
-    font-size:18px;
-    margin-bottom:40px;
+color:#9ca8bb;
+font-size:18px;
+margin-bottom:45px;
 }
-.box{
-    background:#101522;
-    border:1px solid #273044;
-    border-radius:20px;
-    padding:25px;
-    text-align:left;
+
+.creator{
+background:#101725;
+border:1px solid #27344a;
+border-radius:22px;
+padding:28px;
+box-shadow:0 20px 60px rgba(0,0,0,.25);
 }
+
 label{
-    display:block;
-    margin-bottom:10px;
-    font-weight:bold;
+display:block;
+font-size:15px;
+font-weight:bold;
+margin-bottom:12px;
 }
+
 textarea{
-    width:100%;
-    height:150px;
-    background:#080b14;
-    color:white;
-    border:1px solid #30394d;
-    border-radius:12px;
-    padding:15px;
-    font-size:16px;
-    resize:none;
-    outline:none;
+width:100%;
+height:150px;
+background:#080d17;
+border:1px solid #2c3a51;
+border-radius:14px;
+color:white;
+padding:17px;
+font-size:16px;
+resize:none;
+outline:none;
 }
+
+textarea:focus{
+border-color:#19cfff;
+}
+
 .options{
-    display:flex;
-    gap:15px;
-    margin-top:20px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:14px;
+margin-top:18px;
 }
+
 select{
-    flex:1;
-    background:#080b14;
-    color:white;
-    border:1px solid #30394d;
-    border-radius:10px;
-    padding:14px;
+width:100%;
+background:#080d17;
+border:1px solid #2c3a51;
+color:white;
+padding:14px;
+border-radius:11px;
+font-size:14px;
+outline:none;
 }
+
 button{
-    width:100%;
-    margin-top:20px;
-    padding:16px;
-    border:0;
-    border-radius:12px;
-    background:#19cfff;
-    color:#061018;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
+width:100%;
+margin-top:22px;
+padding:16px;
+border:none;
+border-radius:12px;
+background:#19cfff;
+color:#061018;
+font-size:16px;
+font-weight:800;
+cursor:pointer;
 }
-button:hover{opacity:.85}
+
+button:hover{opacity:.9}
+
 #status{
-    text-align:center;
-    margin-top:20px;
-    color:#19cfff;
+margin-top:18px;
+text-align:center;
+color:#19cfff;
+font-size:14px;
+min-height:20px;
+}
+
+.features{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+margin-top:55px;
+}
+
+.feature{
+background:#0d1421;
+border:1px solid #202c40;
+padding:24px;
+border-radius:16px;
+text-align:center;
+}
+
+.icon{
+font-size:30px;
+margin-bottom:12px;
+}
+
+.feature h3{
+font-size:16px;
+margin-bottom:8px;
+}
+
+.feature p{
+font-size:13px;
+color:#8995a9;
+line-height:1.5;
+}
+
+footer{
+text-align:center;
+padding:30px;
+color:#68758a;
+font-size:13px;
+border-top:1px solid #182234;
+}
+
+@media(max-width:700px){
+h1{font-size:38px}
+
+.options{
+grid-template-columns:1fr;
+}
+
+.features{
+grid-template-columns:1fr;
+}
+
+main{
+padding:45px 15px;
+}
 }
 </style>
 </head>
@@ -105,42 +208,48 @@ button:hover{opacity:.85}
 <body>
 
 <header>
-    <div class="logo">🤖 IA <span>SIN COMPLICARSE</span></div>
-    <div class="badge">AI Studio</div>
+<div class="logo">🤖 IA <span>SIN COMPLICARSE</span></div>
+<div class="credits">⚡ 0 créditos</div>
 </header>
 
 <main>
 
-<h1>Crea con <span>IA</span></h1>
+<section class="hero">
+
+<div class="badge">✨ AI CREATION STUDIO</div>
+
+<h1>Crea contenido con <span>IA</span></h1>
 
 <p class="subtitle">
-Genera imágenes y videos con inteligencia artificial de forma sencilla.
+Imágenes y videos con inteligencia artificial.<br>
+Simple, rápido y sin complicaciones.
 </p>
 
-<div class="box">
+<div class="creator">
 
 <label>¿Qué quieres crear?</label>
 
-<textarea id="prompt" placeholder="Ejemplo: Un motorista dominicano contando un chiste frente a una motocicleta..."></textarea>
+<textarea id="prompt"
+placeholder="Ejemplo: Un motorista dominicano contando un chiste frente a su motocicleta..."></textarea>
 
 <div class="options">
 
 <select id="tipo">
-    <option>🎬 Video</option>
-    <option>🖼️ Imagen</option>
+<option>🎬 Video</option>
+<option>🖼️ Imagen</option>
 </select>
 
 <select id="formato">
-    <option>📱 9:16 Vertical</option>
-    <option>🖥️ 16:9 Horizontal</option>
-    <option>⬜ 1:1 Cuadrado</option>
+<option>📱 9:16 Vertical</option>
+<option>🖥️ 16:9 Horizontal</option>
+<option>⬜ 1:1 Cuadrado</option>
 </select>
 
 <select id="duracion">
-    <option>5 segundos</option>
-    <option>10 segundos</option>
-    <option>15 segundos</option>
-    <option>30 segundos</option>
+<option>5 segundos</option>
+<option>10 segundos</option>
+<option>15 segundos</option>
+<option>30 segundos</option>
 </select>
 
 </div>
@@ -151,23 +260,53 @@ Genera imágenes y videos con inteligencia artificial de forma sencilla.
 
 </div>
 
+</section>
+
+<section class="features">
+
+<div class="feature">
+<div class="icon">🎬</div>
+<h3>Videos con IA</h3>
+<p>Crea videos para TikTok, Reels y YouTube Shorts.</p>
+</div>
+
+<div class="feature">
+<div class="icon">🖼️</div>
+<h3>Imágenes con IA</h3>
+<p>Convierte tus ideas en imágenes impresionantes.</p>
+</div>
+
+<div class="feature">
+<div class="icon">⚡</div>
+<h3>Fácil de usar</h3>
+<p>Escribe tu idea, elige las opciones y genera.</p>
+</div>
+
+</section>
+
 </main>
+
+<footer>
+IA Sin Complicarse AI · Aprende · Aplica · Crece
+</footer>
 
 <script>
 function generar(){
-    const prompt=document.getElementById("prompt").value;
-    const status=document.getElementById("status");
 
-    if(!prompt){
-        status.innerText="⚠️ Escribe primero lo que quieres crear.";
-        return;
-    }
+const prompt=document.getElementById("prompt").value.trim();
+const status=document.getElementById("status");
 
-    status.innerText="🤖 Preparando tu creación...";
+if(!prompt){
+status.innerText="⚠️ Escribe primero lo que quieres crear.";
+return;
+}
 
-    setTimeout(()=>{
-        status.innerText="✅ ¡Sistema funcionando! Próximamente conectaremos el modelo de IA.";
-    },1500);
+status.innerText="🤖 Preparando tu creación...";
+
+setTimeout(()=>{
+status.innerText="✅ El sistema está listo. Próximamente conectaremos la IA real.";
+},1500);
+
 }
 </script>
 
