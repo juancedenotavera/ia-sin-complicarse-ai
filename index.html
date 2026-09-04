@@ -291,22 +291,137 @@ IA Sin Complicarse AI · Aprende · Aplica · Crece
 </footer>
 
 <script>
-function generar(){
+async function generar() {
 
-const prompt=document.getElementById("prompt").value.trim();
-const status=document.getElementById("status");
+    const prompt = document.getElementById("prompt").value.trim();
+    const tipo = document.getElementById("tipo").value;
+    const formato = document.getElementById("formato").value;
+    const duracionTexto = document.getElementById("duracion").value;
+    const status = document.getElementById("status");
 
-if(!prompt){
-status.innerText="⚠️ Escribe primero lo que quieres crear.";
-return;
-}
+    if (!prompt) {
+        status.innerText = "⚠️ Escribe primero lo que quieres crear.";
+        return;
+    }
 
-status.innerText="🤖 Preparando tu creación...";
+    // Por ahora conectamos Video.
+    if (tipo.includes("Imagen")) {
+        status.innerText = "🖼️ La generación de imágenes estará disponible próximamente.";
+        return;
+    }
 
-setTimeout(()=>{
-status.innerText="✅ El sistema está listo. Próximamente conectaremos la IA real.";
-},1500);
+    // Convertir formato del menú a formato de la API
+    let aspectRatio = "9:16";
 
+    if (formato.includes("16:9")) {
+        aspectRatio = "16:9";
+    } else if (formato.includes("1:1")) {
+        aspectRatio = "1:1";
+    }
+
+    // Convertir duración
+    const duration = parseInt(duracionTexto);
+
+    // Wan 2.7 permite hasta 15 segundos
+    if (duration > 15) {
+        status.innerText = "⚠️ Por ahora el máximo es 15 segundos.";
+        return;
+    }
+
+    status.innerText = "🤖 Enviando tu idea a la IA...";
+
+    try {
+
+        const response = await fetch("/api/generate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                prompt: prompt,
+                aspectRatio: aspectRatio,
+                duration: duration
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.details || data.error || "Error al iniciar la generación.");
+        }
+
+        const requestId = data.requestId;
+
+        if (!requestId) {
+            throw new Error("No se recibió el ID de generación.");
+        }
+
+        status.innerText = "🎬 Generando tu video...";
+
+        // Consultar estado cada 4 segundos
+        const revisarEstado = async () => {
+
+            const estadoResponse = await fetch(
+                "/api/generate?requestId=" + encodeURIComponent(requestId)
+            );
+
+            const estadoData = await estadoResponse.json();
+
+            if (!estadoResponse.ok) {
+                throw new Error(
+                    estadoData.details ||
+                    estadoData.error ||
+                    "Error consultando la generación."
+                );
+            }
+
+            if (estadoData.status === "COMPLETED") {
+
+                if (!estadoData.video) {
+                    throw new Error("La generación terminó pero no se encontró el video.");
+                }
+
+                status.innerText = "✅ ¡Video generado!";
+
+                const video = document.createElement("video");
+
+                video.src = estadoData.video;
+                video.controls = true;
+                video.autoplay = false;
+                video.playsInline = true;
+
+                video.style.width = "100%";
+                video.style.marginTop = "20px";
+                video.style.borderRadius = "14px";
+                video.style.background = "#000";
+
+                status.appendChild(video);
+
+                return;
+            }
+
+            if (
+                estadoData.status === "FAILED" ||
+                estadoData.status === "ERROR"
+            ) {
+                throw new Error("La generación falló. Intenta nuevamente.");
+            }
+
+            status.innerText = "⏳ Generando tu video...";
+
+            setTimeout(revisarEstado, 4000);
+        };
+
+        revisarEstado();
+
+    } catch (error) {
+
+        console.error(error);
+
+        status.innerText =
+            "❌ " + (error.message || "Ocurrió un error.");
+
+    }
 }
 </script>
 
