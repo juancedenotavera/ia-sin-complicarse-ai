@@ -157,7 +157,7 @@ if (status.status === "COMPLETED") {
       const videoDuration = [5, 10, 15].includes(requestedDuration)
         ? requestedDuration
         : 5;
-
+const cost = videoDuration * 0.10;
 
       // ==========================================
       // GENERAR DIÁLOGO AUTOMÁTICAMENTE
