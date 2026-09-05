@@ -179,15 +179,71 @@ color:#8995a9;
 line-height:1.5;
 }
 
+/* FEEDBACK */
+
+.feedback{
+margin-top:55px;
+background:#101725;
+border:1px solid #27344a;
+border-radius:20px;
+padding:28px;
+text-align:center;
+}
+
+.feedback h2{
+font-size:22px;
+margin-bottom:10px;
+}
+
+.feedback p{
+color:#8995a9;
+font-size:14px;
+margin-bottom:22px;
+}
+
+.feedback textarea{
+height:110px;
+margin-bottom:12px;
+}
+
+.feedback input{
+width:100%;
+background:#080d17;
+border:1px solid #2c3a51;
+border-radius:12px;
+color:white;
+padding:15px;
+font-size:15px;
+outline:none;
+margin-bottom:5px;
+}
+
+.feedback input:focus{
+border-color:#19cfff;
+}
+
+.feedback button{
+margin-top:12px;
+}
+
+#feedbackStatus{
+margin-top:15px;
+font-size:14px;
+min-height:20px;
+color:#19cfff;
+}
+
 footer{
 text-align:center;
 padding:30px;
 color:#68758a;
 font-size:13px;
 border-top:1px solid #182234;
+margin-top:55px;
 }
 
 @media(max-width:700px){
+
 h1{font-size:38px}
 
 .options{
@@ -201,6 +257,20 @@ grid-template-columns:1fr;
 main{
 padding:45px 15px;
 }
+
+header{
+padding:0 20px;
+}
+
+.logo{
+font-size:16px;
+}
+
+.credits{
+font-size:12px;
+padding:8px 12px;
+}
+
 }
 </style>
 </head>
@@ -262,6 +332,7 @@ placeholder="Ejemplo: Un motorista dominicano contando un chiste frente a su mot
 
 </section>
 
+
 <section class="features">
 
 <div class="feature">
@@ -284,13 +355,45 @@ placeholder="Ejemplo: Un motorista dominicano contando un chiste frente a su mot
 
 </section>
 
+
+<!-- FEEDBACK -->
+
+<section class="feedback">
+
+<h2>💬 Ayúdanos a mejorar</h2>
+
+<p>
+¿Hay algo que deberíamos mejorar? Tu opinión nos ayuda a construir una mejor herramienta.
+</p>
+
+<textarea
+id="feedbackComentario"
+placeholder="Escribe aquí tu comentario o sugerencia..."
+></textarea>
+
+<input
+type="email"
+id="feedbackEmail"
+placeholder="Tu email (opcional)"
+>
+
+<button onclick="enviarFeedback()">
+📨 ENVIAR COMENTARIO
+</button>
+
+<div id="feedbackStatus"></div>
+
+</section>
+
 </main>
 
 <footer>
 IA Sin Complicarse AI · Aprende · Aplica · Crece
 </footer>
 
+
 <script>
+
 async function generar() {
 
     const prompt = document.getElementById("prompt").value.trim();
@@ -304,13 +407,11 @@ async function generar() {
         return;
     }
 
-    // Por ahora conectamos Video.
     if (tipo.includes("Imagen")) {
         status.innerText = "🖼️ La generación de imágenes estará disponible próximamente.";
         return;
     }
 
-    // Convertir formato del menú a formato de la API
     let aspectRatio = "9:16";
 
     if (formato.includes("16:9")) {
@@ -319,10 +420,8 @@ async function generar() {
         aspectRatio = "1:1";
     }
 
-    // Convertir duración
     const duration = parseInt(duracionTexto);
 
-    // Wan 2.7 permite hasta 15 segundos
     if (duration > 15) {
         status.innerText = "⚠️ Por ahora el máximo es 15 segundos.";
         return;
@@ -347,7 +446,11 @@ async function generar() {
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.details || data.error || "Error al iniciar la generación.");
+            throw new Error(
+                data.details ||
+                data.error ||
+                "Error al iniciar la generación."
+            );
         }
 
         const requestId = data.requestId;
@@ -358,11 +461,11 @@ async function generar() {
 
         status.innerText = "🎬 Generando tu video...";
 
-        // Consultar estado cada 4 segundos
         const revisarEstado = async () => {
 
             const estadoResponse = await fetch(
-                "/api/generate?requestId=" + encodeURIComponent(requestId)
+                "/api/generate?requestId=" +
+                encodeURIComponent(requestId)
             );
 
             const estadoData = await estadoResponse.json();
@@ -378,7 +481,9 @@ async function generar() {
             if (estadoData.status === "COMPLETED") {
 
                 if (!estadoData.video) {
-                    throw new Error("La generación terminó pero no se encontró el video.");
+                    throw new Error(
+                        "La generación terminó pero no se encontró el video."
+                    );
                 }
 
                 status.innerText = "✅ ¡Video generado!";
@@ -390,13 +495,13 @@ async function generar() {
                 video.autoplay = false;
                 video.playsInline = true;
 
-video.style.width = "auto";
-video.style.maxWidth = "100%";
-video.style.maxHeight = "600px";
-video.style.margin = "20px auto 0";
-video.style.display = "block";
-video.style.borderRadius = "14px";
-video.style.background = "#000";
+                video.style.width = "auto";
+                video.style.maxWidth = "100%";
+                video.style.maxHeight = "600px";
+                video.style.margin = "20px auto 0";
+                video.style.display = "block";
+                video.style.borderRadius = "14px";
+                video.style.background = "#000";
 
                 status.appendChild(video);
 
@@ -407,7 +512,9 @@ video.style.background = "#000";
                 estadoData.status === "FAILED" ||
                 estadoData.status === "ERROR"
             ) {
-                throw new Error("La generación falló. Intenta nuevamente.");
+                throw new Error(
+                    "La generación falló. Intenta nuevamente."
+                );
             }
 
             status.innerText = "⏳ Generando tu video...";
@@ -422,10 +529,76 @@ video.style.background = "#000";
         console.error(error);
 
         status.innerText =
-            "❌ " + (error.message || "Ocurrió un error.");
-
+            "❌ " +
+            (error.message || "Ocurrió un error.");
     }
 }
+
+
+/* ==========================================
+   ENVIAR FEEDBACK
+========================================== */
+
+async function enviarFeedback() {
+
+    const comentario =
+        document.getElementById("feedbackComentario").value.trim();
+
+    const email =
+        document.getElementById("feedbackEmail").value.trim();
+
+    const feedbackStatus =
+        document.getElementById("feedbackStatus");
+
+    if (!comentario) {
+        feedbackStatus.innerText =
+            "⚠️ Escribe primero tu comentario.";
+        return;
+    }
+
+    feedbackStatus.innerText =
+        "📨 Enviando comentario...";
+
+    try {
+
+        const response = await fetch("/api/generate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                action: "feedback",
+                comentario: comentario,
+                email: email
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error ||
+                "No se pudo enviar el comentario."
+            );
+        }
+
+        feedbackStatus.innerText =
+            "✅ ¡Gracias! Tu comentario fue enviado.";
+
+        document.getElementById("feedbackComentario").value = "";
+        document.getElementById("feedbackEmail").value = "";
+
+    } catch (error) {
+
+        console.error(error);
+
+        feedbackStatus.innerText =
+            "❌ " +
+            (error.message ||
+            "No se pudo enviar el comentario.");
+    }
+}
+
 </script>
 
 </body>
