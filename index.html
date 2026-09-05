@@ -622,23 +622,58 @@ async function cargarHistorial() {
 
     historial.innerHTML = "";
 
-    data.videos.forEach(videoData => {
-      const video = document.createElement("video");
+   data.videos.forEach(videoData => {
+  const card = document.createElement("div");
 
-      video.src = videoData.video_url;
-      video.controls = true;
-      video.playsInline = true;
+  card.style.background = "#0d1421";
+  card.style.border = "1px solid #202c40";
+  card.style.borderRadius = "16px";
+  card.style.padding = "18px";
+  card.style.marginTop = "20px";
 
-      video.style.width = "100%";
-      video.style.maxWidth = "500px";
-      video.style.margin = "15px auto";
-      video.style.display = "block";
-      video.style.borderRadius = "14px";
-      video.style.background = "#000";
+  const video = document.createElement("video");
 
-      historial.appendChild(video);
-    });
+  video.src = videoData.video_url;
+  video.controls = true;
+  video.playsInline = true;
 
+  video.style.width = "100%";
+  video.style.maxWidth = "500px";
+  video.style.display = "block";
+  video.style.margin = "0 auto";
+  video.style.borderRadius = "14px";
+  video.style.background = "#000";
+
+  const promptText = document.createElement("p");
+  promptText.innerText = "💡 " + (videoData.prompt || "Sin prompt");
+  promptText.style.color = "#fff";
+  promptText.style.marginTop = "15px";
+
+  const fecha = document.createElement("small");
+  fecha.innerText =
+    "📅 " +
+    new Date(videoData.created_at).toLocaleString("es-DO");
+  fecha.style.color = "#8995a9";
+
+  const descarga = document.createElement("a");
+  descarga.href = videoData.video_url;
+  descarga.download = "video-ia-sin-complicarse.mp4";
+  descarga.target = "_blank";
+  descarga.innerText = "⬇️ Descargar video";
+
+  descarga.style.display = "block";
+  descarga.style.marginTop = "15px";
+  descarga.style.color = "#19cfff";
+  descarga.style.fontWeight = "bold";
+  descarga.style.textDecoration = "none";
+
+  card.appendChild(video);
+  card.appendChild(promptText);
+  card.appendChild(fecha);
+  card.appendChild(descarga);
+
+  historial.appendChild(card);
+});
   } catch (error) {
     console.error(error);
     historial.innerHTML =
