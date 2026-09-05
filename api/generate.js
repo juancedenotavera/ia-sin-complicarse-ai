@@ -139,11 +139,12 @@ Reglas:
 - Hazlo entretenido y fácil de entender.
 `;
 
-      const dialogueResponse = await fal.subscribe("fal-ai/any-llm", {
-        input: {
-          prompt: dialoguePrompt
-        }
-      });
+const dialogueResponse = await fal.subscribe("fal-ai/any-llm", {
+  input: {
+    model: "google/gemini-flash-1.5",
+    prompt: dialoguePrompt
+  }
+});
 
       const dialogue =
         dialogueResponse.data?.output ||
@@ -160,12 +161,15 @@ Reglas:
       // GENERAR VOZ
       // ==========================================
 
-      const voiceResult = await fal.subscribe(TTS_MODEL, {
-        input: {
-          text: dialogue,
-          voice: "Kore"
-        }
-      });
+const voiceResult = await fal.subscribe(TTS_MODEL, {
+  input: {
+    prompt: dialogue,
+    voice: "Kore",
+    model: "gemini-2.5-flash-tts",
+    language_code: "es-US",
+    output_format: "mp3"
+  }
+});
 
       const audioUrl =
         voiceResult.data?.audio?.url ||
