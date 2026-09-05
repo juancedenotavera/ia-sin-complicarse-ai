@@ -63,6 +63,27 @@ return res.status(400).json({
     // CONSULTAR ESTADO
     // ==========================================
     if (req.method === "GET") {
+      if (req.query?.credits === "true") {
+  const creditsResponse = await fetch(
+    `${process.env.SUPABASE_URL}/rest/v1/credits?id=eq.1&select=balance`,
+    {
+      method: "GET",
+      headers: {
+        "apikey": process.env.SUPABASE_SECRET_KEY
+      }
+    }
+  );
+
+  if (!creditsResponse.ok) {
+    throw new Error("No se pudo consultar los créditos.");
+  }
+
+  const creditsData = await creditsResponse.json();
+
+  return res.status(200).json({
+    balance: Number(creditsData?.[0]?.balance || 0)
+  });
+}
 if (req.query?.history === "true") {
   const videosResponse = await fetch(
     `${process.env.SUPABASE_URL}/rest/v1/videos?select=*&order=created_at.desc`,
