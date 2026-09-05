@@ -244,12 +244,13 @@ await fetch(
       "apikey": process.env.SUPABASE_SECRET_KEY,
       "Prefer": "return=minimal"
     },
-    body: JSON.stringify({
-      request_id: request_id,
-      prompt: prompt.trim(),
-      aspect_ratio: ratio,
-      duration: videoDuration
-    })
+body: JSON.stringify({
+  request_id: request_id,
+  prompt: prompt.trim(),
+  aspect_ratio: ratio,
+  duration: videoDuration,
+  cost: cost
+})
   }
 );
 
