@@ -325,7 +325,11 @@ placeholder="Ejemplo: Un motorista dominicano contando un chiste frente a su mot
 </div>
 
 <button onclick="generar()">🚀 GENERAR</button>
+<button onclick="cargarHistorial()" style="background:#101725;color:#19cfff;border:1px solid #19cfff;">
+  🎬 MIS VIDEOS
+</button>
 
+<div id="historial"></div>
 <div id="status"></div>
 
 </div>
@@ -598,7 +602,49 @@ async function enviarFeedback() {
             "No se pudo enviar el comentario.");
     }
 }
+async function cargarHistorial() {
+  const historial = document.getElementById("historial");
 
+  historial.innerHTML = "⏳ Cargando tus videos...";
+
+  try {
+    const response = await fetch("/api/generate?history=true");
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "No se pudo cargar el historial.");
+    }
+
+    if (!data.videos || data.videos.length === 0) {
+      historial.innerHTML = "📭 Todavía no tienes videos guardados.";
+      return;
+    }
+
+    historial.innerHTML = "";
+
+    data.videos.forEach(videoData => {
+      const video = document.createElement("video");
+
+      video.src = videoData.video_url;
+      video.controls = true;
+      video.playsInline = true;
+
+      video.style.width = "100%";
+      video.style.maxWidth = "500px";
+      video.style.margin = "15px auto";
+      video.style.display = "block";
+      video.style.borderRadius = "14px";
+      video.style.background = "#000";
+
+      historial.appendChild(video);
+    });
+
+  } catch (error) {
+    console.error(error);
+    historial.innerHTML =
+      "❌ " + (error.message || "Error cargando los videos.");
+  }
+}
 </script>
 
 </body>
