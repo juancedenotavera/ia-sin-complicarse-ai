@@ -158,7 +158,23 @@ if (status.status === "COMPLETED") {
         ? requestedDuration
         : 5;
 const cost = videoDuration * 0.10;
+const creditsResponse = await fetch(
+  `${process.env.SUPABASE_URL}/rest/v1/credits?id=eq.1&select=balance`,
+  {
+    headers: {
+      "apikey": process.env.SUPABASE_SECRET_KEY
+    }
+  }
+);
 
+const creditsData = await creditsResponse.json();
+const balance = Number(creditsData?.[0]?.balance || 0);
+
+if (balance < cost) {
+  return res.status(402).json({
+    error: `Créditos insuficientes. Necesitas $${cost.toFixed(2)}.`
+  });
+}
       // ==========================================
       // GENERAR DIÁLOGO AUTOMÁTICAMENTE
       // ==========================================
