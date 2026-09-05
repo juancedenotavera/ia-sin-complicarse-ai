@@ -12,9 +12,9 @@ export default async function handler(req, res) {
       const { comentario, email } = req.body;
 
       if (!comentario || !comentario.trim()) {
-        return res.status(400).json(
-          error: "Escribe un comentario."
-        });
+return res.status(400).json({
+  error: "Escribe un comentario."
+});
       }
 
       const supabaseResponse = await fetch(
