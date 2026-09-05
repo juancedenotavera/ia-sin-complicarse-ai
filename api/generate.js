@@ -86,7 +86,7 @@ return res.status(400).json({
 }
 if (req.query?.history === "true") {
   const videosResponse = await fetch(
-    `${process.env.SUPABASE_URL}/rest/v1/videos?select=*&order=created_at.desc`,
+`${process.env.SUPABASE_URL}/rest/v1/videos?select=*&order=created_at.desc`,
     {
       method: "GET",
       headers: {
@@ -190,6 +190,7 @@ const creditsResponse = await fetch(
 
 const creditsData = await creditsResponse.json();
 const balance = Number(creditsData?.[0]?.balance || 0);
+const totalSpent = Number(creditsData?.[0]?.total_spent || 0);
 
 if (balance < cost) {
   return res.status(402).json({
@@ -207,7 +208,7 @@ await fetch(
     },
     body: JSON.stringify({
       balance: balance - cost,
-      total_spent: cost
+total_spent: totalSpent + cost
     })
   }
 );
