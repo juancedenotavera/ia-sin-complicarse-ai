@@ -20,12 +20,11 @@ export default async function handler(req, res) {
         `${process.env.SUPABASE_URL}/rest/v1/feedback,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "apikey": process.env.SUPABASE_SECRET_KEY,
-            "Authorization": `Bearer ${process.env.SUPABASE_SECRET_KEY}`,
-            "Prefer": "return=minimal"
-          },
+         headers: {
+  "Content-Type": "application/json",
+  "apikey": process.env.SUPABASE_SECRET_KEY,
+  "Prefer": "return=minimal"
+},
           body: JSON.stringify({
             comentario: comentario.trim(),
             email: email?.trim() || null
