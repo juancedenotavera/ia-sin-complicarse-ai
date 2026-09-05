@@ -17,7 +17,7 @@ export default async function handler(req, res) {
       }
 
       const supabaseResponse = await fetch(
-        `${process.env.SUPABASE_URL}/rest/v1/feedback,
+        `${process.env.SUPABASE_URL}/rest/v1/feedback`,
         {
           method: "POST",
          headers: {
