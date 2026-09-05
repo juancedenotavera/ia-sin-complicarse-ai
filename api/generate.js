@@ -175,6 +175,21 @@ if (balance < cost) {
     error: `Créditos insuficientes. Necesitas $${cost.toFixed(2)}.`
   });
 }
+await fetch(
+  `${process.env.SUPABASE_URL}/rest/v1/credits?id=eq.1`,
+  {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": process.env.SUPABASE_SECRET_KEY,
+      "Prefer": "return=minimal"
+    },
+    body: JSON.stringify({
+      balance: balance - cost,
+      total_spent: cost
+    })
+  }
+);
       // ==========================================
       // GENERAR DIÁLOGO AUTOMÁTICAMENTE
       // ==========================================
