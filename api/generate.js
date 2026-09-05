@@ -63,7 +63,28 @@ export default async function handler(req, res) {
     // CONSULTAR ESTADO
     // ==========================================
     if (req.method === "GET") {
+if (req.query?.history === "true") {
+  const videosResponse = await fetch(
+    `${process.env.SUPABASE_URL}/rest/v1/videos?select=*&order=created_at.desc`,
+    {
+      method: "GET",
+      headers: {
+        "apikey": process.env.SUPABASE_SECRET_KEY
+      }
+    }
+  );
 
+  if (!videosResponse.ok) {
+    throw new Error("No se pudo cargar el historial.");
+  }
+
+  const videos = await videosResponse.json();
+
+  return res.status(200).json({
+    success: true,
+    videos
+  });
+}
       const requestId = req.query?.requestId;
 
       if (!requestId) {
