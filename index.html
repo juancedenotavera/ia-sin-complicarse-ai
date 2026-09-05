@@ -331,7 +331,9 @@ placeholder="Ejemplo: Un motorista dominicano contando un chiste frente a su mot
 
 <div id="historial"></div>
 <div id="status"></div>
-
+<div id="creditos" style="margin-top:15px;color:#19cfff;font-weight:bold;">
+  💰 Créditos: $10.00
+</div>
 </div>
 
 </section>
@@ -680,6 +682,21 @@ async function cargarHistorial() {
       "❌ " + (error.message || "Error cargando los videos.");
   }
 }
+async function cargarCreditos() {
+  try {
+    const response = await fetch("/api/generate?credits=true");
+    const data = await response.json();
+
+    if (response.ok) {
+      document.getElementById("creditos").innerText =
+        "💰 Créditos: $" + Number(data.balance).toFixed(2);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+cargarCreditos();
 </script>
 
 </body>
