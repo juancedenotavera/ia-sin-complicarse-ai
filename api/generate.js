@@ -76,17 +76,35 @@ export default async function handler(req, res) {
         requestId
       });
 
-      if (status.status === "COMPLETED") {
+if (status.status === "COMPLETED") {
 
-        const result = await fal.queue.result(MODEL, {
-          requestId
-        });
+  const result = await fal.queue.result(MODEL, {
+    requestId
+  });
 
-        return res.status(200).json({
-          status: "COMPLETED",
-          video: result.data?.video?.url || null
-        });
-      }
+  const videoUrl = result.data?.video?.url || null;
+
+  await fetch(
+    `${process.env.SUPABASE_URL}/rest/v1/videos?request_id=eq.${encodeURIComponent(requestId)}`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": process.env.SUPABASE_SECRET_KEY,
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify({
+        video_url: videoUrl
+      })
+    }
+  );
+
+  return res.status(200).json({
+    status: "COMPLETED",
+    video: videoUrl
+  });
+}
+    
 
       return res.status(200).json({
         status: status.status
@@ -196,7 +214,23 @@ language_code: "Spanish (Latin America)",
           enable_safety_checker: true
         }
       });
-
+await fetch(
+  `${process.env.SUPABASE_URL}/rest/v1/videos`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": process.env.SUPABASE_SECRET_KEY,
+      "Prefer": "return=minimal"
+    },
+    body: JSON.stringify({
+      request_id: request_id,
+      prompt: prompt.trim(),
+      aspect_ratio: ratio,
+      duration: videoDuration
+    })
+  }
+);
 
       return res.status(200).json({
         success: true,
