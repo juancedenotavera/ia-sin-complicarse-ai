@@ -12,7 +12,7 @@ export default async function handler(req, res) {
       const { comentario, email } = req.body;
 
       if (!comentario || !comentario.trim()) {
-        return res.status(400).json({
+        return res.status(400).json(
           error: "Escribe un comentario."
         });
       }
@@ -166,7 +166,7 @@ const voiceResult = await fal.subscribe(TTS_MODEL, {
     prompt: dialogue,
     voice: "Kore",
     model: "gemini-2.5-flash-tts",
-    language_code: "es-US",
+language_code: "Spanish (Latin America)",
     output_format: "mp3"
   }
 });
