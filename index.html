@@ -390,10 +390,13 @@ async function generar() {
                 video.autoplay = false;
                 video.playsInline = true;
 
-                video.style.width = "100%";
-                video.style.marginTop = "20px";
-                video.style.borderRadius = "14px";
-                video.style.background = "#000";
+video.style.width = "auto";
+video.style.maxWidth = "100%";
+video.style.maxHeight = "600px";
+video.style.margin = "20px auto 0";
+video.style.display = "block";
+video.style.borderRadius = "14px";
+video.style.background = "#000";
 
                 status.appendChild(video);
 
