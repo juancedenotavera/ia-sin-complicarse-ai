@@ -23,7 +23,7 @@ export default async function handler(req, res) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "apikey": process.env.SUPABASE_ANON_KEY
+        apikey: process.env.SUPABASE_PUBLISHABLE_KEY
         },
         body: JSON.stringify({
           email,
