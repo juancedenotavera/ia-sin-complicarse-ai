@@ -438,7 +438,7 @@ async function generar() {
     status.innerText = "🤖 Enviando tu idea a la IA...";
 
     try {
-
+status.innerText = "⏳ Generando tu video... Por favor espera.";
         const response = await fetch("/api/generate", {
             method: "POST",
             headers: {
