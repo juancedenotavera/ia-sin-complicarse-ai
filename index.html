@@ -315,7 +315,7 @@ placeholder="Ejemplo: Un motorista dominicano contando un chiste frente a su mot
 <option>⬜ 1:1 Cuadrado</option>
 </select>
 
-<select id="duracion">
+<select id="duracion" onchange="actualizarCosto()">
 <option>5 segundos</option>
 <option>10 segundos</option>
 <option>15 segundos</option>
@@ -405,7 +405,7 @@ IA Sin Complicarse AI · Aprende · Aplica · Crece
 async function generar() {
 
     const prompt = document.getElementById("prompt").value.trim();
-    const tipo = document.getElementById("tipo").value;
+      const tipo = document.getElementById("tipo").value;
     const formato = document.getElementById("formato").value;
     const duracionTexto = document.getElementById("duracion").value;
     const status = document.getElementById("status");
@@ -541,7 +541,23 @@ async function generar() {
             (error.message || "Ocurrió un error.");
     }
 }
+function actualizarCosto() {
+  const duration = Number(
+    document.getElementById("duracion").value
+  );
 
+  const costo = duration * 0.10;
+
+  document.getElementById("costoVideo").innerText =
+    "💰 Costo: $" + costo.toFixed(2);
+}
+
+document.getElementById("duracion").addEventListener(
+  "change",
+  actualizarCosto
+);
+
+actualizarCosto();
 
 /* ==========================================
    ENVIAR FEEDBACK
