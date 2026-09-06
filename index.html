@@ -512,7 +512,12 @@ status.innerText = "✅ ¡Video generado correctamente!";
                 video.style.background = "#000";
 
                 status.appendChild(video);
+const regenerar = document.createElement("button");
+regenerar.innerText = "🔄 REGENERAR";
+regenerar.style.marginTop = "15px";
+regenerar.onclick = generar;
 
+status.appendChild(regenerar);
                 return;
             }
 
