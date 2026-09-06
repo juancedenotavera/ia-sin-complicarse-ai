@@ -470,7 +470,7 @@ status.innerText = "⏳ Generando tu video... Por favor espera.";
         status.innerText = "🎬 Generando tu video...";
 
         const revisarEstado = async () => {
-
+status.innerText = "🎬 Procesando video con IA...";
             const estadoResponse = await fetch(
                 "/api/generate?requestId=" +
                 encodeURIComponent(requestId)
