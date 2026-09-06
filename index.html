@@ -756,6 +756,62 @@ document.getElementById("creditosHeader").innerText =
 }
 
 cargarCreditos();
+  async function registrarse() {
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const authStatus = document.getElementById("authStatus");
+
+  authStatus.innerText = "⏳ Registrando...";
+
+  const response = await fetch("/api/auth", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      action: "signup",
+      email,
+      password
+    })
+  });
+
+  const data = await response.json();
+
+  if (response.ok) {
+    authStatus.innerText = "✅ Registro exitoso. Ahora inicia sesión.";
+  } else {
+    authStatus.innerText = "❌ " + (data.error || "Error al registrarse");
+  }
+}
+
+async function iniciarSesion() {
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const authStatus = document.getElementById("authStatus");
+
+  authStatus.innerText = "⏳ Iniciando sesión...";
+
+  const response = await fetch("/api/auth", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      action: "login",
+      email,
+      password
+    })
+  });
+
+  const data = await response.json();
+
+  if (response.ok) {
+    localStorage.setItem("access_token", data.access_token);
+    authStatus.innerText = "✅ Sesión iniciada correctamente.";
+  } else {
+    authStatus.innerText = "❌ " + (data.error || "Error al iniciar sesión");
+  }
+}
 </script>
 
 </body>
