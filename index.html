@@ -292,7 +292,20 @@ button {
 </head>
 
 <body>
+<div id="authBox" style="max-width:420px;margin:30px auto;padding:25px;background:#101725;border:1px solid #19cfff;border-radius:15px;text-align:center;">
+  <h2>🔐 Acceso</h2>
 
+  <input id="authEmail" type="email" placeholder="Correo electrónico"
+    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
+
+  <input id="authPassword" type="password" placeholder="Contraseña"
+    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
+
+  <button onclick="registrarse()">📝 REGISTRARME</button>
+  <button onclick="iniciarSesion()">🚀 INICIAR SESIÓN</button>
+
+  <div id="authStatus" style="margin-top:15px;"></div>
+</div>
 <header>
 <div class="logo">🤖 IA <span>SIN COMPLICARSE</span></div>
 <div class="credits" id="creditosHeader">⚡ $10.00</div>
