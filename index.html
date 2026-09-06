@@ -542,8 +542,10 @@ async function generar() {
     }
 }
 function actualizarCosto() {
+  const duracionTexto = document.getElementById("duracion").value;
+
   const duration = Number(
-    document.getElementById("duracion").value
+    duracionTexto.replace(" segundos", "").trim()
   );
 
   const costo = duration * 0.10;
