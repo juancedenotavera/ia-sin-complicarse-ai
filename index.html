@@ -444,10 +444,51 @@ async function generar() {
         return;
     }
 
-    if (tipo.includes("Imagen")) {
-        status.innerText = "🖼️ La generación de imágenes estará disponible próximamente.";
-        return;
+if (tipo.includes("Imagen")) {
+
+    status.innerText = "🖼️ Generando tu imagen...";
+
+    try {
+        const response = await fetch("/api/generate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("access_token")
+            },
+            body: JSON.stringify({
+                tipo: "imagen",
+                prompt: prompt,
+                aspectRatio: aspectRatio
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "No se pudo generar la imagen.");
+        }
+
+        status.innerText = "✅ ¡Imagen generada correctamente!";
+
+        const imagen = document.createElement("img");
+        imagen.src = data.image;
+        imagen.style.width = "100%";
+        imagen.style.maxWidth = "700px";
+        imagen.style.margin = "20px auto 0";
+        imagen.style.display = "block";
+        imagen.style.borderRadius = "14px";
+
+        status.appendChild(imagen);
+
+    } catch (error) {
+        console.error(error);
+
+        status.innerText =
+            "❌ " + (error.message || "Ocurrió un error.");
     }
+
+    return;
+}
 
     let aspectRatio = "9:16";
 
