@@ -158,7 +158,33 @@ if (status.status === "COMPLETED") {
     // CREAR VIDEO
     // ==========================================
     if (req.method === "POST") {
+const authHeader = req.headers.authorization;
 
+if (!authHeader) {
+  return res.status(401).json({
+    error: "Debes iniciar sesión"
+  });
+}
+
+const userResponse = await fetch(
+  `${process.env.SUPABASE_URL}/auth/v1/user`,
+  {
+    headers: {
+      "apikey": process.env.SUPABASE_PUBLISHABLE_KEY,
+      "Authorization": authHeader
+    }
+  }
+);
+
+const userData = await userResponse.json();
+
+if (!userResponse.ok) {
+  return res.status(401).json({
+    error: "Sesión inválida"
+  });
+}
+
+const userId = userData.id;
       const { prompt, aspectRatio, duration } = req.body || {};
 
       if (!prompt || !prompt.trim()) {
@@ -302,7 +328,8 @@ body: JSON.stringify({
   prompt: prompt.trim(),
   aspect_ratio: ratio,
   duration: videoDuration,
-  cost: cost
+cost: cost,
+user_id: userId
 })
   }
 );
