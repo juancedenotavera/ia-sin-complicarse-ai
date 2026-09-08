@@ -732,7 +732,46 @@ async function cargarHistorial() {
   card.appendChild(promptText);
   card.appendChild(fecha);
   card.appendChild(descarga);
+const eliminar = document.createElement("button");
+eliminar.innerText = "🗑️ ELIMINAR";
+eliminar.style.marginTop = "10px";
+eliminar.style.background = "#101725";
+eliminar.style.color = "#ff6b6b";
+eliminar.style.border = "1px solid #ff6b6b";
 
+eliminar.onclick = async () => {
+  if (!confirm("¿Seguro que quieres eliminar este video?")) {
+    return;
+  }
+
+  eliminar.innerText = "⏳ Eliminando...";
+
+  try {
+    const response = await fetch(
+      "/api/generate?id=" + encodeURIComponent(videoData.id),
+      {
+        method: "DELETE",
+        headers: {
+          "Authorization": "Bearer " + localStorage.getItem("access_token")
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "No se pudo eliminar.");
+    }
+
+    card.remove();
+
+  } catch (error) {
+    eliminar.innerText = "🗑️ ELIMINAR";
+    alert(error.message);
+  }
+};
+
+card.appendChild(eliminar);
   historial.appendChild(card);
 });
   } catch (error) {
