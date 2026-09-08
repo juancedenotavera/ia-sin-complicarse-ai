@@ -152,7 +152,36 @@ if (status.status === "COMPLETED") {
   });
 
   const videoUrl = result.data?.video?.url || null;
+const videoRecordResponse = await fetch(
+  `${process.env.SUPABASE_URL}/rest/v1/videos?request_id=eq.${encodeURIComponent(requestId)}&select=audio_url`,
+  {
+    headers: {
+      "apikey": process.env.SUPABASE_SECRET_KEY
+    }
+  }
+);
 
+const videoRecordData = await videoRecordResponse.json();
+
+const audioUrl = videoRecordData?.[0]?.audio_url || null;
+
+if (!audioUrl) {
+  throw new Error("No se encontró el audio guardado.");
+}
+const lipsyncResult = await fal.subscribe("fal-ai/musetalk", {
+  input: {
+    source_video_url: videoUrl,
+    audio_url: audioUrl
+  }
+});
+
+const finalVideoUrl =
+  lipsyncResult.data?.video?.url || null;
+
+if (!finalVideoUrl) {
+  throw new Error("No se pudo sincronizar el video con el audio.");
+}
+  
   await fetch(
     `${process.env.SUPABASE_URL}/rest/v1/videos?request_id=eq.${encodeURIComponent(requestId)}`,
     {
@@ -162,9 +191,9 @@ if (status.status === "COMPLETED") {
         "apikey": process.env.SUPABASE_SECRET_KEY,
         "Prefer": "return=minimal"
       },
-      body: JSON.stringify({
-        video_url: videoUrl
-      })
+body: JSON.stringify({
+  video_url: finalVideoUrl
+})
     }
   );
 
@@ -377,8 +406,9 @@ body: JSON.stringify({
   prompt: prompt.trim(),
   aspect_ratio: ratio,
   duration: videoDuration,
-cost: cost,
-user_id: userId
+  cost: cost,
+  user_id: userId,
+  audio_url: audioUrl
 })
   }
 );
