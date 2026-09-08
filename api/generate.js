@@ -301,7 +301,29 @@ const dialogueResponse = await fal.subscribe("fal-ai/any-llm", {
         throw new Error("No se pudo generar el diálogo.");
       }
 
+function detectarVoz(prompt) {
+  const texto = prompt.toLowerCase();
 
+  const palabrasFemeninas = [
+    "mujer", "mujeres", "chica", "señora", "niña",
+    "abuela", "madre", "mamá", "esposa", "joven mujer"
+  ];
+
+  const palabrasMasculinas = [
+    "hombre", "hombres", "chico", "señor", "niño",
+    "abuelo", "padre", "papá", "esposo", "joven hombre"
+  ];
+
+  if (palabrasFemeninas.some(palabra => texto.includes(palabra))) {
+    return "Kore";
+  }
+
+  if (palabrasMasculinas.some(palabra => texto.includes(palabra))) {
+    return "Puck";
+  }
+
+  return "Puck";
+}
       // ==========================================
       // GENERAR VOZ
       // ==========================================
@@ -309,7 +331,7 @@ const dialogueResponse = await fal.subscribe("fal-ai/any-llm", {
 const voiceResult = await fal.subscribe(TTS_MODEL, {
   input: {
     prompt: dialogue,
-    voice: "Kore",
+voice: detectarVoz(prompt),
     model: "gemini-2.5-flash-tts",
 language_code: "Spanish (Latin America)",
     output_format: "mp3"
