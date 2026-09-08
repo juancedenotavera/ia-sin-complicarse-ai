@@ -85,8 +85,35 @@ return res.status(400).json({
   });
 }
 if (req.query?.history === "true") {
+const authHeader = req.headers.authorization;
+
+if (!authHeader) {
+  return res.status(401).json({
+    error: "Debes iniciar sesión"
+  });
+}
+
+const userResponse = await fetch(
+  `${process.env.SUPABASE_URL}/auth/v1/user`,
+  {
+    headers: {
+      "apikey": process.env.SUPABASE_PUBLISHABLE_KEY,
+      "Authorization": authHeader
+    }
+  }
+);
+
+const userData = await userResponse.json();
+
+if (!userResponse.ok) {
+  return res.status(401).json({
+    error: "Sesión inválida"
+  });
+}
+
+const userId = userData.id;
   const videosResponse = await fetch(
-`${process.env.SUPABASE_URL}/rest/v1/videos?select=*&order=created_at.desc`,
+`${process.env.SUPABASE_URL}/rest/v1/videos?user_id=eq.${userId}&select=*&order=created_at.desc`,
     {
       method: "GET",
       headers: {
@@ -206,7 +233,7 @@ const userId = userData.id;
         : 5;
 const cost = videoDuration * 0.10;
 const creditsResponse = await fetch(
-  `${process.env.SUPABASE_URL}/rest/v1/credits?id=eq.1&select=balance`,
+`${process.env.SUPABASE_URL}/rest/v1/credits?id=eq.1&select=balance,total_spent`,
   {
     headers: {
       "apikey": process.env.SUPABASE_SECRET_KEY
