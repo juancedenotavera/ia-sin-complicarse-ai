@@ -298,7 +298,34 @@ if (!userResponse.ok) {
 
 const userId = userData.id;
       const { prompt, aspectRatio, duration } = req.body || {};
+// ==========================================
+// GENERAR IMAGEN
+// ==========================================
+if (req.body?.tipo === "imagen") {
 
+  const imageResult = await fal.subscribe(IMAGE_MODEL, {
+    input: {
+      prompt: prompt.trim(),
+      image_size: aspectRatio === "9:16"
+        ? "portrait_4_3"
+        : aspectRatio === "1:1"
+        ? "square_hd"
+        : "landscape_4_3",
+      num_images: 1
+    }
+  });
+
+  const imageUrl = imageResult.data?.images?.[0]?.url || null;
+
+  if (!imageUrl) {
+    throw new Error("No se pudo generar la imagen.");
+  }
+
+  return res.status(200).json({
+    success: true,
+    image: imageUrl
+  });
+}
       if (!prompt || !prompt.trim()) {
         return res.status(400).json({
           error: "Escribe un prompt."
