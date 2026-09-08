@@ -357,6 +357,10 @@ placeholder="Ejemplo: Un motorista dominicano contando un chiste frente a su mot
 <button onclick="cargarHistorial()" style="background:#101725;color:#19cfff;border:1px solid #19cfff;">
   🎬 MIS VIDEOS
 </button>
+
+  <button onclick="cargarImagenes()" style="background:#101725;color:#19cfff;border:1px solid #19cfff;">
+  🖼️ MIS IMÁGENES
+</button>
 <div id="costoVideo" style="margin-top:12px;color:#19cfff;font-weight:bold;">
   💰 Costo: $0.50
 </div>
@@ -829,6 +833,117 @@ card.appendChild(eliminar);
       "❌ " + (error.message || "Error cargando los videos.");
   }
 }
+async function cargarImagenes() {
+  const historial = document.getElementById("historial");
+
+  historial.innerHTML = "⏳ Cargando tus imágenes...";
+
+  try {
+    const response = await fetch(
+      "/api/generate?history=true&type=imagen",
+      {
+        headers: {
+          "Authorization": "Bearer " + localStorage.getItem("access_token")
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "No se pudieron cargar las imágenes.");
+    }
+
+    const imagenes = (data.videos || []).filter(
+      item => item.type === "imagen" && item.image_url
+    );
+
+    if (imagenes.length === 0) {
+      historial.innerHTML = "📭 Todavía no tienes imágenes guardadas.";
+      return;
+    }
+
+    historial.innerHTML = "";
+
+    imagenes.forEach(imagenData => {
+      const card = document.createElement("div");
+
+      card.style.background = "#0d1421";
+      card.style.border = "1px solid #202c40";
+      card.style.borderRadius = "16px";
+      card.style.padding = "18px";
+      card.style.marginTop = "20px";
+
+      const imagen = document.createElement("img");
+
+      imagen.src = imagenData.image_url;
+      imagen.style.width = "100%";
+      imagen.style.maxWidth = "700px";
+      imagen.style.display = "block";
+      imagen.style.margin = "0 auto";
+      imagen.style.borderRadius = "14px";
+
+      const promptText = document.createElement("p");
+      promptText.innerText = "💡 " + (imagenData.prompt || "Sin prompt");
+      promptText.style.color = "#fff";
+      promptText.style.marginTop = "15px";
+
+      const descarga = document.createElement("a");
+      descarga.href = imagenData.image_url;
+      descarga.download = "imagen-ia-sin-complicarse.png";
+      descarga.target = "_blank";
+      descarga.innerText = "⬇️ Descargar imagen";
+
+      descarga.style.display = "block";
+      descarga.style.marginTop = "15px";
+      descarga.style.color = "#19cfff";
+      descarga.style.fontWeight = "bold";
+      descarga.style.textDecoration = "none";
+
+      const eliminar = document.createElement("button");
+      eliminar.innerText = "🗑️ ELIMINAR";
+      eliminar.style.marginTop = "10px";
+      eliminar.style.background = "#101725";
+      eliminar.style.color = "#ff6b6b";
+      eliminar.style.border = "1px solid #ff6b6b";
+
+      eliminar.onclick = async () => {
+        if (!confirm("¿Seguro que quieres eliminar esta imagen?")) {
+          return;
+        }
+
+        const response = await fetch(
+          "/api/generate?id=" + encodeURIComponent(imagenData.id),
+          {
+            method: "DELETE",
+            headers: {
+              "Authorization": "Bearer " + localStorage.getItem("access_token")
+            }
+          }
+        );
+
+        if (response.ok) {
+          card.remove();
+        } else {
+          alert("No se pudo eliminar la imagen.");
+        }
+      };
+
+      card.appendChild(imagen);
+      card.appendChild(promptText);
+      card.appendChild(descarga);
+      card.appendChild(eliminar);
+
+      historial.appendChild(card);
+    });
+
+  } catch (error) {
+    console.error(error);
+    historial.innerHTML =
+      "❌ " + (error.message || "Error cargando las imágenes.");
+  }
+}
+  
 async function cargarCreditos() {
   try {
     const response = await fetch("/api/generate?credits=true");
