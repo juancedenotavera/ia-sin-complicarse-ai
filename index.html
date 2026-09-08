@@ -472,6 +472,7 @@ status.innerText = "⏳ Generando tu video... Por favor espera.";
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
+              "Authorization": "Bearer " + localStorage.getItem("access_token")
             },
             body: JSON.stringify({
                 prompt: prompt,
