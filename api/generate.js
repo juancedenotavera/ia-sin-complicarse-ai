@@ -303,6 +303,41 @@ const userId = userData.id;
 // ==========================================
 if (req.body?.tipo === "imagen") {
 const imageCost = 0.03;
+const creditsResponse = await fetch(
+  `${process.env.SUPABASE_URL}/rest/v1/credits?id=eq.1&select=balance,total_spent`,
+  {
+    headers: {
+      "apikey": process.env.SUPABASE_SECRET_KEY
+    }
+  }
+);
+
+const creditsData = await creditsResponse.json();
+const balance = Number(creditsData?.[0]?.balance || 0);
+const totalSpent = Number(creditsData?.[0]?.total_spent || 0);
+
+if (balance < imageCost) {
+  return res.status(402).json({
+    error: `Créditos insuficientes. Necesitas $${imageCost.toFixed(2)}.`
+  });
+}
+
+await fetch(
+  `${process.env.SUPABASE_URL}/rest/v1/credits?id=eq.1`,
+  {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": process.env.SUPABASE_SECRET_KEY,
+      "Prefer": "return=minimal"
+    },
+    body: JSON.stringify({
+      balance: balance - imageCost,
+      total_spent: totalSpent + imageCost
+    })
+  }
+);
+  
   const imageResult = await fal.subscribe(IMAGE_MODEL, {
     input: {
       prompt: prompt.trim(),
