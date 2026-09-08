@@ -302,7 +302,7 @@ const userId = userData.id;
 // GENERAR IMAGEN
 // ==========================================
 if (req.body?.tipo === "imagen") {
-
+const imageCost = 0.03;
   const imageResult = await fal.subscribe(IMAGE_MODEL, {
     input: {
       prompt: prompt.trim(),
