@@ -665,11 +665,11 @@ async function cargarHistorial() {
   historial.innerHTML = "⏳ Cargando tus videos...";
 
   try {
-    const response = await fetch("/api/generate?history=true");
-      headers: {
+   const response = await fetch("/api/generate?history=true", {
+  headers: {
     "Authorization": "Bearer " + localStorage.getItem("access_token")
   }
-})
+});
     const data = await response.json();
 
     if (!response.ok) {
