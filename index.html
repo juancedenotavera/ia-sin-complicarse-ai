@@ -333,7 +333,7 @@ placeholder="Ejemplo: Un motorista dominicano contando un chiste frente a su mot
 
 <div class="options">
 
-<select id="tipo">
+<select id="tipo" onchange="cambiarTipo()">
 <option>🎬 Video</option>
 <option>🖼️ Imagen</option>
 </select>
@@ -430,7 +430,16 @@ IA Sin Complicarse AI · Aprende · Aplica · Crece
 
 
 <script>
+function cambiarTipo() {
+  const tipo = document.getElementById("tipo").value;
+  const duracion = document.getElementById("duracion");
 
+  if (tipo.includes("Imagen")) {
+    duracion.style.display = "none";
+  } else {
+    duracion.style.display = "block";
+  }
+}
 async function generar() {
 
     const prompt = document.getElementById("prompt").value.trim();
@@ -635,7 +644,7 @@ document.getElementById("duracion").addEventListener(
 );
 
 actualizarCosto();
-
+cambiarTipo();
 /* ==========================================
    ENVIAR FEEDBACK
 ========================================== */
