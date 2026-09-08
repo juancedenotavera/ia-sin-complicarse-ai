@@ -1013,12 +1013,11 @@ async function iniciarSesion() {
 
   const data = await response.json();
 
-  if (response.ok) {
-    localStorage.setItem("access_token", data.access_token);
-    authStatus.innerText = "✅ Sesión iniciada correctamente.";
-  } else {
-    authStatus.innerText = "❌ " + (data.error || "Error al iniciar sesión");
-  }
+if (response.ok) {
+  localStorage.setItem("access_token", data.access_token);
+
+  document.getElementById("authBox").style.display = "none";
+}
 }
 </script>
 
