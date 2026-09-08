@@ -470,10 +470,10 @@ async function generar() {
 status.innerText = "⏳ Generando tu video... Por favor espera.";
         const response = await fetch("/api/generate", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-              "Authorization": "Bearer " + localStorage.getItem("access_token")
-            },
+headers: {
+  "Content-Type": "application/json",
+  "Authorization": "Bearer " + localStorage.getItem("access_token")
+},
             body: JSON.stringify({
                 prompt: prompt,
                 aspectRatio: aspectRatio,
