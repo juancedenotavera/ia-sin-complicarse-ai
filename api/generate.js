@@ -213,6 +213,62 @@ body: JSON.stringify({
     // ==========================================
     // CREAR VIDEO
     // ==========================================
+
+if (req.method === "DELETE") {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({
+      error: "Debes iniciar sesión"
+    });
+  }
+
+  const userResponse = await fetch(
+    `${process.env.SUPABASE_URL}/auth/v1/user`,
+    {
+      headers: {
+        "apikey": process.env.SUPABASE_PUBLISHABLE_KEY,
+        "Authorization": authHeader
+      }
+    }
+  );
+
+  const userData = await userResponse.json();
+
+  if (!userResponse.ok) {
+    return res.status(401).json({
+      error: "Sesión inválida"
+    });
+  }
+
+  const userId = userData.id;
+  const videoId = req.query?.id;
+
+  if (!videoId) {
+    return res.status(400).json({
+      error: "Falta el ID del video"
+    });
+  }
+
+  const deleteResponse = await fetch(
+    `${process.env.SUPABASE_URL}/rest/v1/videos?id=eq.${encodeURIComponent(videoId)}&user_id=eq.${userId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "apikey": process.env.SUPABASE_SECRET_KEY
+      }
+    }
+  );
+
+  if (!deleteResponse.ok) {
+    throw new Error("No se pudo eliminar el video.");
+  }
+
+  return res.status(200).json({
+    success: true
+  });
+}
+    
     if (req.method === "POST") {
 const authHeader = req.headers.authorization;
 
