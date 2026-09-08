@@ -355,7 +355,25 @@ await fetch(
   if (!imageUrl) {
     throw new Error("No se pudo generar la imagen.");
   }
-
+await fetch(
+  `${process.env.SUPABASE_URL}/rest/v1/videos`,
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": process.env.SUPABASE_SECRET_KEY,
+      "Prefer": "return=minimal"
+    },
+    body: JSON.stringify({
+      prompt: prompt.trim(),
+      image_url: imageUrl,
+      type: "imagen",
+      aspect_ratio: aspectRatio,
+      cost: imageCost,
+      user_id: userId
+    })
+  }
+);
   return res.status(200).json({
     success: true,
     image: imageUrl
