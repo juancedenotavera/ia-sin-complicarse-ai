@@ -1445,6 +1445,8 @@ document.getElementById("creditosHeader").innerText =
 }
 
 cargarCreditos();
+
+
   function cerrarSesion() {
   localStorage.removeItem("access_token");
 document.body.classList.remove("logueado");
@@ -1452,6 +1454,20 @@ document.body.classList.remove("logueado");
   document.getElementById("authBox").style.display = "block";
   document.getElementById("authStatus").innerText = "";
 }
+
+  function restaurarSesion() {
+  const token = localStorage.getItem("access_token");
+
+  if (token) {
+    document.body.classList.add("logueado");
+    document.getElementById("authBox").style.display = "none";
+    document.getElementById("userBox").style.display = "flex";
+  }
+}
+
+restaurarSesion();
+
+  
   async function registrarse() {
   const email = document.getElementById("authEmail").value.trim();
   const password = document.getElementById("authPassword").value;
