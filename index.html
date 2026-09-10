@@ -768,19 +768,32 @@ header{
 </head>
 
 <body>
-<div id="authBox" style="max-width:420px;margin:30px auto;padding:25px;background:#101725;border:1px solid #19cfff;border-radius:15px;text-align:center;">
-  <h2>🔐 Acceso</h2>
+<div id="authBox" class="login-screen">
 
-  <input id="authEmail" type="email" placeholder="Correo electrónico"
-    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
+  <div class="login-card">
 
-  <input id="authPassword" type="password" placeholder="Contraseña"
-    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
+    <div class="login-logo">🤖</div>
 
-  <button onclick="registrarse()">📝 REGISTRARME</button>
-  <button onclick="iniciarSesion()">🚀 INICIAR SESIÓN</button>
+    <h2>Bienvenido a IA Sin Complicarse</h2>
 
-  <div id="authStatus" style="margin-top:15px;"></div>
+    <p>Genera imágenes y videos con inteligencia artificial.</p>
+
+    <input id="authEmail" type="email" placeholder="Correo electrónico">
+
+    <input id="authPassword" type="password" placeholder="Contraseña">
+
+    <button onclick="iniciarSesion()">
+      🚀 INICIAR SESIÓN
+    </button>
+
+    <button class="secondary" onclick="registrarse()">
+      ✨ CREAR CUENTA
+    </button>
+
+    <div id="authStatus"></div>
+
+  </div>
+
 </div>
 
 <header>
