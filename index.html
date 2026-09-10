@@ -1518,12 +1518,15 @@ async function iniciarSesion() {
   const data = await response.json();
 
 if (response.ok) {
+  localStorage.setItem("access_token", data.access_token);
+
   document.body.classList.add("logueado");
 
-document.getElementById("authBox").style.display = "none";
-document.getElementById("userBox").style.display = "block";
-document.body.classList.add("logueado");
-  
+  document.getElementById("authBox").style.display = "none";
+  document.getElementById("userBox").style.display = "flex";
+} else {
+  authStatus.innerText =
+    "❌ " + (data.error || "Error al iniciar sesión");
 }
 }
 </script>
