@@ -1447,7 +1447,7 @@ document.getElementById("creditosHeader").innerText =
 cargarCreditos();
   function cerrarSesion() {
   localStorage.removeItem("access_token");
-
+document.body.classList.remove("logueado");
   document.getElementById("userBox").style.display = "none";
   document.getElementById("authBox").style.display = "block";
   document.getElementById("authStatus").innerText = "";
