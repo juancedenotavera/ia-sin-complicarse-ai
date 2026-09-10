@@ -1221,7 +1221,14 @@ status.appendChild(regenerar);
     }
 }
 function actualizarCosto() {
+  const tipo = document.getElementById("tipo").value;
   const duracionTexto = document.getElementById("duracion").value;
+  const costoElemento = document.getElementById("costoVideo");
+
+  if (tipo.includes("Imagen")) {
+    costoElemento.innerText = "💰 Costo: desde $0.03";
+    return;
+  }
 
   const duration = Number(
     duracionTexto.replace(" segundos", "").trim()
@@ -1229,7 +1236,7 @@ function actualizarCosto() {
 
   const costo = duration * 0.10;
 
-  document.getElementById("costoVideo").innerText =
+  costoElemento.innerText =
     "💰 Costo: $" + costo.toFixed(2);
 }
 
