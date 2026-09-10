@@ -404,7 +404,33 @@ textarea:focus{
 /* SELECTORES */
 
 .options{
-  gap:12px;
+  display:grid;
+  grid-template-columns:1.1fr 1.1fr .8fr;
+  gap:14px;
+  margin-top:20px;
+}
+
+.options select{
+  height:54px;
+  padding:0 16px;
+  background:#080e18;
+  border:1px solid #293a54;
+  border-radius:14px;
+  color:#fff;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.options select:hover{
+  border-color:#19cfff;
+  background:#0b1422;
+}
+
+.options select:focus{
+  border-color:#19cfff;
+  box-shadow:0 0 0 3px rgba(25,207,255,.08);
 }
 
 select{
