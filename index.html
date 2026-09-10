@@ -349,15 +349,39 @@ h1{
 
 .creator{
   background:
-    linear-gradient(145deg,rgba(18,27,43,.96),rgba(10,16,27,.96));
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:24px;
-  padding:30px;
+    linear-gradient(145deg,rgba(17,27,44,.98),rgba(7,13,24,.98));
+  border:1px solid rgba(25,207,255,.18);
+  border-radius:26px;
+  padding:38px;
   box-shadow:
-    0 30px 80px rgba(0,0,0,.35),
-    0 0 50px rgba(25,207,255,.035);
+    0 30px 90px rgba(0,0,0,.45),
+    0 0 60px rgba(25,207,255,.05);
+  position:relative;
+  overflow:hidden;
 }
 
+.creator::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:10%;
+  right:10%;
+  height:1px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(25,207,255,.7),
+    transparent
+  );
+}
+
+.creator label{
+  font-size:15px;
+  font-weight:700;
+  color:#e6edf7;
+  text-align:center;
+  margin-bottom:14px;
+}
 .creator label{
   font-size:14px;
   color:#c7d1df;
