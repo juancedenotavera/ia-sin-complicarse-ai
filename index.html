@@ -14,7 +14,17 @@ background:#070b14;
 color:#fff;
 min-height:100vh;
 }
+/* OCULTAR APP HASTA INICIAR SESIÓN */
 
+body:not(.logueado) header,
+body:not(.logueado) main,
+body:not(.logueado) footer{
+  display:none !important;
+}
+
+body:not(.logueado) #authBox{
+  display:block !important;
+}
 header{
 height:72px;
 border-bottom:1px solid #20283a;
@@ -1492,10 +1502,12 @@ async function iniciarSesion() {
   const data = await response.json();
 
 if (response.ok) {
-  localStorage.setItem("access_token", data.access_token);
+  document.body.classList.add("logueado");
 
 document.getElementById("authBox").style.display = "none";
 document.getElementById("userBox").style.display = "block";
+document.body.classList.add("logueado");
+  
 }
 }
 </script>
