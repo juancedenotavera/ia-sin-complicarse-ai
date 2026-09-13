@@ -197,10 +197,10 @@ body: JSON.stringify({
     }
   );
 
-  return res.status(200).json({
-    status: "COMPLETED",
-    video: videoUrl
-  });
+return res.status(200).json({
+  status: "COMPLETED",
+  video: finalVideoUrl
+});
 }
     
 
