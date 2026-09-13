@@ -1,4 +1,4 @@
-const MODEL = "fal-ai/wan/v2.7/text-to-video";
+const MODEL = "alibaba/wan-3.0/text-to-video";
 const TTS_MODEL = "fal-ai/gemini-tts";
 const IMAGE_MODEL = "fal-ai/flux-2-pro";
 export default async function handler(req, res) {
