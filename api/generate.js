@@ -523,7 +523,7 @@ language_code: "Spanish (Latin America)",
           aspect_ratio: ratio,
           resolution: "1080p",
           duration: videoDuration,
-          audio_url: audioUrl,
+          audio: true,
           enable_prompt_expansion: true,
           enable_safety_checker: true
         }
