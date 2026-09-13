@@ -517,9 +517,19 @@ language_code: "Spanish (Latin America)",
       // GENERAR VIDEO CON LA VOZ
       // ==========================================
 
+const wanPrompt = `
+${prompt.trim()}
+
+AUDIO DE LA ESCENA:
+Generar música de fondo, sonidos ambientales y efectos de sonido
+sincronizados con las acciones visibles.
+NO generar diálogo, narración ni voz hablada.
+La voz será añadida posteriormente por el sistema.
+`;
+      
       const { request_id } = await fal.queue.submit(MODEL, {
         input: {
-          prompt: prompt.trim(),
+         prompt: wanPrompt,
           aspect_ratio: ratio,
           resolution: "1080p",
           duration: videoDuration,
