@@ -393,10 +393,10 @@ await fetch(
 
       const requestedDuration = Number(duration);
 
-      const videoDuration = [5, 10, 15].includes(requestedDuration)
-        ? requestedDuration
-        : 5;
-const cost = videoDuration * 0.10;
+const videoDuration = [5, 10, 15, 30].includes(requestedDuration)
+  ? requestedDuration
+  : 5;
+const cost = videoDuration * 0.20;
 const creditsResponse = await fetch(
 `${process.env.SUPABASE_URL}/rest/v1/credits?id=eq.1&select=balance,total_spent`,
   {
@@ -521,7 +521,7 @@ language_code: "Spanish (Latin America)",
         input: {
           prompt: prompt.trim(),
           aspect_ratio: ratio,
-          resolution: "720p",
+          resolution: "1080p",
           duration: videoDuration,
           audio_url: audioUrl,
           enable_prompt_expansion: true,
