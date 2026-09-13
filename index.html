@@ -939,6 +939,7 @@ placeholder="Ejemplo: Un motorista dominicano contando un chiste frente a su mot
 <option>5 segundos</option>
 <option>10 segundos</option>
 <option>15 segundos</option>
+  <option>30 segundos</option>
 
 </select>
 
@@ -1104,10 +1105,10 @@ if (tipo.includes("Imagen")) {
 
     const duration = parseInt(duracionTexto);
 
-    if (duration > 15) {
-        status.innerText = "⚠️ Por ahora el máximo es 15 segundos.";
-        return;
-    }
+if (duration > 30) {
+  status.innerText = "⚠️ El máximo es 30 segundos.";
+  return;
+}
 
     status.innerText = "🤖 Enviando tu idea a la IA...";
 
@@ -1235,7 +1236,7 @@ function actualizarCosto() {
     duracionTexto.replace(" segundos", "").trim()
   );
 
-  const costo = duration * 0.10;
+  const costo = duration * 0.20;
 
   costoElemento.innerText =
     "💰 Costo: $" + costo.toFixed(2);
