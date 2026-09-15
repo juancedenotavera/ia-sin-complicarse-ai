@@ -1170,32 +1170,113 @@ status.innerText = "🎬 Procesando video con IA...";
                     );
                 }
 
-status.innerText = "✅ ¡Video generado correctamente!";
+status.innerText = "👄 Sincronizando labios con la voz...";
 
-                const video = document.createElement("video");
+const lipsyncResponse = await fetch("/api/generate", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("access_token")
+    },
+    body: JSON.stringify({
+        action: "lipsync",
+        requestId: requestId
+    })
+});
 
-                video.src = estadoData.video;
-                video.controls = true;
-                video.autoplay = false;
-                video.playsInline = true;
+const lipsyncData = await lipsyncResponse.json();
 
-                video.style.width = "auto";
-                video.style.maxWidth = "100%";
-                video.style.maxHeight = "600px";
-                video.style.margin = "20px auto 0";
-                video.style.display = "block";
-                video.style.borderRadius = "14px";
-                video.style.background = "#000";
+if (!lipsyncResponse.ok) {
+    throw new Error(
+        lipsyncData.details ||
+        lipsyncData.error ||
+        "No se pudo iniciar la sincronización."
+    );
+}
 
-                status.appendChild(video);
-const regenerar = document.createElement("button");
-regenerar.innerText = "🔄 REGENERAR";
-regenerar.style.marginTop = "15px";
-regenerar.onclick = generar;
+const lipsyncRequestId = lipsyncData.lipsyncRequestId;
 
-status.appendChild(regenerar);
-                return;
-            }
+if (!lipsyncRequestId) {
+    throw new Error("No se recibió el ID de sincronización.");
+}
+
+const revisarLipsync = async () => {
+
+    const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + localStorage.getItem("access_token")
+        },
+        body: JSON.stringify({
+            action: "lipsync-status",
+            lipsyncRequestId: lipsyncRequestId,
+            requestId: requestId
+        })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(
+            data.details ||
+            data.error ||
+            "Error consultando la sincronización."
+        );
+    }
+
+    if (data.status === "COMPLETED") {
+
+        if (!data.video) {
+            throw new Error(
+                "La sincronización terminó pero no se encontró el video."
+            );
+        }
+
+        status.innerText = "✅ ¡Video generado y sincronizado!";
+
+        const video = document.createElement("video");
+
+        video.src = data.video;
+        video.controls = true;
+        video.autoplay = false;
+        video.playsInline = true;
+
+        video.style.width = "auto";
+        video.style.maxWidth = "100%";
+        video.style.maxHeight = "600px";
+        video.style.margin = "20px auto 0";
+        video.style.display = "block";
+        video.style.borderRadius = "14px";
+        video.style.background = "#000";
+
+        status.appendChild(video);
+
+        const regenerar = document.createElement("button");
+        regenerar.innerText = "🔄 REGENERAR";
+        regenerar.style.marginTop = "15px";
+        regenerar.onclick = generar;
+
+        status.appendChild(regenerar);
+
+        return;
+    }
+
+    if (
+        data.status === "FAILED" ||
+        data.status === "ERROR"
+    ) {
+        throw new Error(
+            "La sincronización de labios falló."
+        );
+    }
+
+    status.innerText = "👄 Sincronizando labios...";
+
+    setTimeout(revisarLipsync, 4000);
+};
+
+revisarLipsync();            }
 
             if (
                 estadoData.status === "FAILED" ||
