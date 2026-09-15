@@ -85,6 +85,59 @@ return res.status(400).json({
   });
 }
 if (req.query?.history === "true") {
+
+  if (req.body?.action === "lipsync-status") {
+
+  const { lipsyncRequestId, requestId } = req.body;
+
+  if (!lipsyncRequestId || !requestId) {
+    return res.status(400).json({
+      error: "Faltan los IDs del lipsync."
+    });
+  }
+
+  const status = await fal.queue.status("fal-ai/musetalk", {
+    requestId: lipsyncRequestId
+  });
+
+  if (status.status === "COMPLETED") {
+
+    const result = await fal.queue.result("fal-ai/musetalk", {
+      requestId: lipsyncRequestId
+    });
+
+    const finalVideoUrl =
+      result.data?.video?.url || null;
+
+    if (!finalVideoUrl) {
+      throw new Error("MuseTalk terminó pero no devolvió video.");
+    }
+
+    await fetch(
+      `${process.env.SUPABASE_URL}/rest/v1/videos?request_id=eq.${encodeURIComponent(requestId)}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": process.env.SUPABASE_SECRET_KEY,
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify({
+          video_url: finalVideoUrl
+        })
+      }
+    );
+
+    return res.status(200).json({
+      status: "COMPLETED",
+      video: finalVideoUrl
+    });
+  }
+
+  return res.status(200).json({
+    status: status.status
+  });
+}
 const authHeader = req.headers.authorization;
 
 if (!authHeader) {
