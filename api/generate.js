@@ -245,6 +245,52 @@ if (req.method === "DELETE") {
 }
     
     if (req.method === "POST") {
+
+      if (req.body?.action === "lipsync") {
+
+  const { requestId } = req.body;
+
+  if (!requestId) {
+    return res.status(400).json({
+      error: "Falta requestId"
+    });
+  }
+
+  const videoRecordResponse = await fetch(
+    `${process.env.SUPABASE_URL}/rest/v1/videos?request_id=eq.${encodeURIComponent(requestId)}&select=video_url,audio_url`,
+    {
+      headers: {
+        "apikey": process.env.SUPABASE_SECRET_KEY
+      }
+    }
+  );
+
+  const videoRecordData = await videoRecordResponse.json();
+
+  const videoUrl = videoRecordData?.[0]?.video_url || null;
+  const audioUrl = videoRecordData?.[0]?.audio_url || null;
+
+  if (!videoUrl || !audioUrl) {
+    return res.status(400).json({
+      error: "No se encontró el video o el audio."
+    });
+  }
+
+  const { request_id } = await fal.queue.submit(
+    "fal-ai/musetalk",
+    {
+      input: {
+        source_video_url: videoUrl,
+        audio_url: audioUrl
+      }
+    }
+  );
+
+  return res.status(200).json({
+    success: true,
+    lipsyncRequestId: request_id
+  });
+}
 const authHeader = req.headers.authorization;
 
 if (!authHeader) {
